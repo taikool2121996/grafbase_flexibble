@@ -57,13 +57,16 @@ export const authOptions: NextAuthOptions = {
         console.error("Error retrieving user data: ", error.message);
         return session;
       }
+
     },
     async signIn({ user }: {
       user: AdapterUser | User
     }) {
       try {
+        // get the user if they exist
         const userExists = await getUser(user?.email as string) as { user?: UserProfile }
 
+        // if they don't exist, create them
         if (!userExists.user) {
           await createUser(user.name as string, user.email as string, user.image as string)
         }
